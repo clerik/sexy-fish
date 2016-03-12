@@ -1,45 +1,58 @@
-set sexy_fish_prompt_reset normal #"\033[m"
+# Port of sexy-bash-prompt to fishshell.
 
-set sexy_fish_prompt_user_color blue #"\033[1;34m" # BLUE
-set sexy_fish_prompt_preposition_color white #"\033[1;37m" # WHITE
-set sexy_fish_prompt_device_color cyan #"\033[1;36m" # CYAN
-set sexy_fish_prompt_dir_color green #"\033[1;32m" # GREEN
-set sexy_fish_prompt_git_status_color yellow #"\033[1;33m" # YELLOW
-set sexy_fish_prompt_git_progress_color red #"\033[1;31m" # RED
-set sexy_fish_prompt_symbol_color normal # NORMAL
-set sexy_fish_prompt_symbol "\$"
+set -l sexy_fish_prompt_reset normal
 
-if set -q PROMPT_USER_COLOR; set sexy_fish_prompt_user_color $PROMPT_USER_COLOR; end
-if set -q PROMPT_PREPOSITION_COLOR; set sexy_fish_prompt_preposition_color $PROMPT_PREPOSITION_COLOR; end
-if set -q PROMPT_DEVICE_COLOR; set sexy_fish_prompt_device_color $PROMPT_DEVICE_COLOR; end
-if set -q PROMPT_DIR_COLOR; set sexy_fish_prompt_dir_color $PROMPT_DIR_COLOR; end
-if set -q PROMPT_GIT_STATUS_COLOR; set sexy_fish_prompt_git_status_color $PROMPT_GIT_STATUS_COLOR; end
-if set -q PROMPT_GIT_PROGRESS_COLOR; set sexy_fish_prompt_git_progress_color $PROMPT_GIT_PROGRESS_COLOR; end
-if set -q PROMPT_SYMBOL; set sexy_fish_prompt_symbol $PROMPT_SYMBOL; end
-if set -q PROMPT_SYMBOL_COLOR; set sexy_fish_prompt_symbol_color $PROMPT_SYMBOL_COLOR; end
+# Since fish manage color output, we don't need to do anything except set colors.
+# See http://fishshell.com/docs/current/commands.html#set_color for more information.
+set -l sexy_fish_prompt_user_color blue
+set -l sexy_fish_prompt_preposition_color white
+set -l sexy_fish_prompt_device_color cyan
+set -l sexy_fish_prompt_dir_color green
+set -l sexy_fish_prompt_git_status_color yellow
+set -l sexy_fish_prompt_git_progress_color red
+set -l sexy_fish_prompt_symbol_color normal
+
+switch $USER
+  case root toor
+    if set -q fish_color_cwd_root
+      set sexy_fish_prompt_user_color $fish_color_cwd_root
+    end
+    set sexy_fish_prompt_symbol "#"
+  case '*'
+    set sexy_fish_prompt_symbol "\$"
+end
+
+if set -q PROMPT_USER_COLOR;          set sexy_fish_prompt_user_color $PROMPT_USER_COLOR; end
+if set -q PROMPT_PREPOSITION_COLOR;   set sexy_fish_prompt_preposition_color $PROMPT_PREPOSITION_COLOR; end
+if set -q PROMPT_DEVICE_COLOR;        set sexy_fish_prompt_device_color $PROMPT_DEVICE_COLOR; end
+if set -q PROMPT_DIR_COLOR;           set sexy_fish_prompt_dir_color $PROMPT_DIR_COLOR; end
+if set -q PROMPT_GIT_STATUS_COLOR;    set sexy_fish_prompt_git_status_color $PROMPT_GIT_STATUS_COLOR; end
+if set -q PROMPT_GIT_PROGRESS_COLOR;  set sexy_fish_prompt_git_progress_color $PROMPT_GIT_PROGRESS_COLOR; end
+if set -q PROMPT_SYMBOL;              set sexy_fish_prompt_symbol $PROMPT_SYMBOL; end
+if set -q PROMPT_SYMBOL_COLOR;        set sexy_fish_prompt_symbol_color $PROMPT_SYMBOL_COLOR; end
 
 # Set up symbols
-set sexy_fish_prompt_synced_symbol ""
-set sexy_fish_prompt_dirty_synced_symbol "*"
-set sexy_fish_prompt_unpushed_symbol "△"
-set sexy_fish_prompt_dirty_unpushed_symbol "▲"
-set sexy_fish_prompt_unpulled_symbol "▽"
-set sexy_fish_prompt_dirty_unpulled_symbol "▼"
-set sexy_fish_prompt_unpushed_unpulled_symbol "⬡"
-set sexy_fish_prompt_dirty_unpushed_unpulled_symbol "⬢"
+set -l sexy_fish_prompt_synced_symbol ""
+set -l sexy_fish_prompt_dirty_synced_symbol "*"
+set -l sexy_fish_prompt_unpushed_symbol "△"
+set -l sexy_fish_prompt_dirty_unpushed_symbol "▲"
+set -l sexy_fish_prompt_unpulled_symbol "▽"
+set -l sexy_fish_prompt_dirty_unpulled_symbol "▼"
+set -l sexy_fish_prompt_unpushed_unpulled_symbol "⬡"
+set -l sexy_fish_prompt_dirty_unpushed_unpulled_symbol "⬢"
 
 # Apply symbol overrides that have been set in the environment
 # DEV: Working unicode symbols can be determined via the following gist
 #   **WARNING: The following gist has 64k lines and may freeze your browser**
 #   https://gist.github.com/twolfson/9cc7968eb6ee8b9ad877
-if set -q PROMPT_SYNCED_SYMBOL; set sexy_fish_prompt_synced_symbol $PROMPT_SYNCED_SYMBOL; end
-if set -q PROMPT_DIRTY_SYNCED_SYMBOL; set sexy_fish_prompt_dirty_synced_symbol $PROMPT_DIRTY_SYNCED_SYMBOL; end
-if set -q PROMPT_UNPUSHED_SYMBOL; set sexy_fish_prompt_unpushed_symbol $PROMPT_UNPUSHED_SYMBOL; end
-if set -q PROMPT_DIRTY_UNPUSHED_SYMBOL; set sexy_fish_prompt_dirty_unpushed_symbol $PROMPT_DIRTY_UNPUSHED_SYMBOL; end
-if set -q PROMPT_UNPULLED_SYMBOL; set sexy_fish_prompt_unpulled_symbol $PROMPT_UNPULLED_SYMBOL; end
-if set -q PROMPT_DIRTY_UNPULLED_SYMBOL; set sexy_fish_prompt_dirty_unpulled_symbol $PROMPT_DIRTY_UNPULLED_SYMBOL; end
-if set -q PROMPT_UNPUSHED_UNPULLED_SYMBOL; set sexy_fish_prompt_unpushed_unpulled_symbol $PROMPT_UNPUSHED_UNPULLED_SYMBOL; end
-if set -q PROMPT_DIRTY_UNPUSHED_UNPULLED_SYMBOL; set sexy_fish_prompt_dirty_unpushed_unpulled_symbol $PROMPT_DIRTY_UNPUSHED_UNPULLED_SYMBOL; end
+if set -q PROMPT_SYNCED_SYMBOL;                   set sexy_fish_prompt_synced_symbol $PROMPT_SYNCED_SYMBOL; end
+if set -q PROMPT_DIRTY_SYNCED_SYMBOL;             set sexy_fish_prompt_dirty_synced_symbol $PROMPT_DIRTY_SYNCED_SYMBOL; end
+if set -q PROMPT_UNPUSHED_SYMBOL;                 set sexy_fish_prompt_unpushed_symbol $PROMPT_UNPUSHED_SYMBOL; end
+if set -q PROMPT_DIRTY_UNPUSHED_SYMBOL;           set sexy_fish_prompt_dirty_unpushed_symbol $PROMPT_DIRTY_UNPUSHED_SYMBOL; end
+if set -q PROMPT_UNPULLED_SYMBOL;                 set sexy_fish_prompt_unpulled_symbol $PROMPT_UNPULLED_SYMBOL; end
+if set -q PROMPT_DIRTY_UNPULLED_SYMBOL;           set sexy_fish_prompt_dirty_unpulled_symbol $PROMPT_DIRTY_UNPULLED_SYMBOL; end
+if set -q PROMPT_UNPUSHED_UNPULLED_SYMBOL;        set sexy_fish_prompt_unpushed_unpulled_symbol $PROMPT_UNPUSHED_UNPULLED_SYMBOL; end
+if set -q PROMPT_DIRTY_UNPUSHED_UNPULLED_SYMBOL;  set sexy_fish_prompt_dirty_unpushed_unpulled_symbol $PROMPT_DIRTY_UNPUSHED_UNPULLED_SYMBOL; end
 
 function sexy_fish_prompt_get_git_branch
   # On branches, this will return the branch name
@@ -106,7 +119,7 @@ end
 
 function sexy_fish_prompt_branch_exists -a branch
   # List remote branches           | # Find our branch and exit with 0 or 1 if found/not found
-  git branch --remote 2> /dev/null | grep --quiet $branch
+  command git branch --remote 2> /dev/null | grep --quiet $branch
 end
 
 function sexy_fish_prompt_parse_git_ahead
@@ -121,17 +134,18 @@ function sexy_fish_prompt_parse_git_ahead
   #
   #     Unsynced commit
 
-  # If the remote branch is behind the local branch
-  # or it has not been merged into origin (remote branch doesn't exist)
   sexy_fish_prompt_is_branch1_behind_branch2 $remote_branch $branch
-  set s $status
+  set is_behind $status
   sexy_fish_prompt_branch_exists $remote_branch
   set remote $status
-  if test \($s = 0\) -o \($remote = 0\)
+
+  # If the remote branch is behind the local branch
+  # or it has not been merged into origin (remote branch doesn't exist)
+  if test \($is_behind = 0\) -o \($remote = 0\)
     # echo our character
-    return 1
+    false
   else
-    return 0
+    true
   end
 end
 
@@ -169,11 +183,6 @@ end
 
 function sexy_fish_prompt_is_on_git
   command git rev-parse 2> /dev/null
-  # if test $status -eq 0
-  #   echo 1
-  # else
-  #   echo 0
-  # end
 end
 
 function sexy_fish_prompt_get_git_status
@@ -224,29 +233,6 @@ function sexy_fish_prompt_get_git_info
   end
 end
 
-# function fish_prompt_old --description 'Write out the prompt'
-#   # Just calculate this once, to save a few cycles when displaying the prompt
-#   if not set -q __fish_prompt_hostname
-#     set -g __fish_prompt_hostname (hostname|cut -d . -f 1)
-#   end
-
-#   set -l color_cwd
-#   set -l suffix
-#   switch $USER
-#     case root toor
-#       if set -q fish_color_cwd_root
-#         set color_cwd $fish_color_cwd_root
-#       else
-#         set color_cwd $fish_color_cwd
-#       end
-#       set suffix '#'
-#     case '*'
-#       set color_cwd $fish_color_cwd
-#       set suffix '>'
-#   end
-#   echo -n -s "$USER" @ "$__fish_prompt_hostname" ' ' (set_color $color_cwd) (prompt_pwd) (set_color normal) "$suffix "
-# end
-
 function fish_prompt
   if not set -q __fish_prompt_hostname
     set -g __fish_prompt_hostname (hostname|cut -d . -f 1)
@@ -267,11 +253,5 @@ function fish_prompt
        (set_color --bold $sexy_fish_prompt_device_color)"$__fish_prompt_hostname"(set_color $sexy_fish_prompt_reset) \
        (set_color --bold $sexy_fish_prompt_preposition_color)"in"(set_color $sexy_fish_prompt_reset) \
        (set_color --bold $sexy_fish_prompt_dir_color)(prompt_pwd) "$git"(set_color $sexy_fish_prompt_reset)
-  #if test (sexy_fish_prompt_is_on_git)
-  # ( sexy_fish_prompt_is_on_git && \
-  #   echo -n \" $sexy_fish_prompt_preposition_coloron$sexy_fish_prompt_reset \" && \
-  #   echo -n \"$sexy_fish_prompt_git_status_color\$(sexy_fish_prompt_get_git_info)\" && \
-  #   echo -n \"$sexy_fish_prompt_git_progress_color\$(sexy_fish_prompt_get_git_progress)\" && \
-  #   echo -n \"$sexy_fish_prompt_preposition_color\")\n$sexy_fish_prompt_reset\
   echo (set_color --bold $sexy_fish_prompt_symbol_color)"$sexy_fish_prompt_symbol "
 end
