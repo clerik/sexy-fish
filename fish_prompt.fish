@@ -174,10 +174,10 @@ end
 function sexy_fish_prompt_parse_git_dirty
   # If the git status has *any* changes (e.g. dirty), echo our character
   set stat (git status --porcelain 2> /dev/null)
-  if test -n "$stat"
-    false
-  else
+  if test -z "$stat"
     true
+  else
+    false
   end
 end
 
