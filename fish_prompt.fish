@@ -165,19 +165,19 @@ function sexy_fish_prompt_parse_git_behind
   sexy_fish_prompt_is_branch1_behind_branch2 {$branch} {$remote_branch}
   if test $status -eq 0
     # echo our character
-    echo 1
+    false
   else
-    echo 0
+    true
   end
 end
 
 function sexy_fish_prompt_parse_git_dirty
   # If the git status has *any* changes (e.g. dirty), echo our character
   set stat (git status --porcelain 2> /dev/null)
-  if test -n $stat
-    echo 1
+  if test -n "$stat"
+    false
   else
-    echo 0
+    true
   end
 end
 
@@ -187,10 +187,12 @@ end
 
 function sexy_fish_prompt_get_git_status
   # Grab the git dirty and git behind
-  set dirty_branch (sexy_fish_prompt_parse_git_dirty)
+  sexy_fish_prompt_parse_git_dirty
+  set dirty_branch $status
   sexy_fish_prompt_parse_git_ahead
   set branch_ahead $status
-  set branch_behind (sexy_fish_prompt_parse_git_behind)
+  sexy_fish_prompt_parse_git_behind
+  set branch_behind $status
 
   # echo dirty_branch $dirty_branch
   # echo branch_ahead $branch_ahead
@@ -234,24 +236,38 @@ function sexy_fish_prompt_get_git_info
 end
 
 function fish_prompt
+  # From fishshell fish_prompt.
+  # Precalculate the hostname and set a variable to save a few cycle.
   if not set -q __fish_prompt_hostname
     set -g __fish_prompt_hostname (hostname|cut -d . -f 1)
   end
 
+  # Add an empty line above the prompt.
   echo ''
 
+  # Set $git to an empty string.
   set git ''
+  # Call sexy_fish_prompt_is_on_git to verify if we are in a git managed repository.
   sexy_fish_prompt_is_on_git
   if test $status = 0
+            # set on
     set git $git(set_color --bold $sexy_fish_prompt_preposition_color)'on '
+            # set branch and symbol
     set git $git(set_color --bold $sexy_fish_prompt_git_status_color)(sexy_fish_prompt_get_git_info)
-    # set git $git(set_color --bold $sexy_fish_prompt_git_progress_color)(sexy_fish_prompt_get_git_progress)
+            # set progress
+    set git $git(set_color --bold $sexy_fish_prompt_git_progress_color)(sexy_fish_prompt_get_git_progress)
   end
 
+       # echo user
   echo (set_color --bold $sexy_fish_prompt_user_color)"$USER"(set_color $sexy_fish_prompt_reset) \
+       # echo at
        (set_color --bold $sexy_fish_prompt_preposition_color)"at"(set_color $sexy_fish_prompt_reset) \
+       # echo hostname
        (set_color --bold $sexy_fish_prompt_device_color)"$__fish_prompt_hostname"(set_color $sexy_fish_prompt_reset) \
+       # echo in
        (set_color --bold $sexy_fish_prompt_preposition_color)"in"(set_color $sexy_fish_prompt_reset) \
+       # echo shortcuted working directory and git part
        (set_color --bold $sexy_fish_prompt_dir_color)(prompt_pwd) "$git"(set_color $sexy_fish_prompt_reset)
+       # echo prompt symbol
   echo (set_color --bold $sexy_fish_prompt_symbol_color)"$sexy_fish_prompt_symbol "
 end
