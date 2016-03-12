@@ -141,7 +141,7 @@ function sexy_fish_prompt_parse_git_ahead
 
   # If the remote branch is behind the local branch
   # or it has not been merged into origin (remote branch doesn't exist)
-  if test $is_behind = 0 -o $remote = 1
+  if test $is_behind = 0 -o $remote = 0
     # echo our character
     false
   else
