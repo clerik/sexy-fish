@@ -1,16 +1,16 @@
 # Port of sexy-bash-prompt to fishshell.
 
-set -l sexy_fish_prompt_reset normal
+set sexy_fish_prompt_reset normal
 
 # Since fish manage color output, we don't need to do anything except set colors.
 # See http://fishshell.com/docs/current/commands.html#set_color for more information.
-set -l sexy_fish_prompt_user_color blue
-set -l sexy_fish_prompt_preposition_color white
-set -l sexy_fish_prompt_device_color cyan
-set -l sexy_fish_prompt_dir_color green
-set -l sexy_fish_prompt_git_status_color yellow
-set -l sexy_fish_prompt_git_progress_color red
-set -l sexy_fish_prompt_symbol_color normal
+set sexy_fish_prompt_user_color blue
+set sexy_fish_prompt_preposition_color white
+set sexy_fish_prompt_device_color cyan
+set sexy_fish_prompt_dir_color green
+set sexy_fish_prompt_git_status_color yellow
+set sexy_fish_prompt_git_progress_color red
+set sexy_fish_prompt_symbol_color normal
 
 switch $USER
   case root toor
@@ -32,14 +32,14 @@ if set -q PROMPT_SYMBOL;              set sexy_fish_prompt_symbol $PROMPT_SYMBOL
 if set -q PROMPT_SYMBOL_COLOR;        set sexy_fish_prompt_symbol_color $PROMPT_SYMBOL_COLOR; end
 
 # Set up symbols
-set -l sexy_fish_prompt_synced_symbol ""
-set -l sexy_fish_prompt_dirty_synced_symbol "*"
-set -l sexy_fish_prompt_unpushed_symbol "△"
-set -l sexy_fish_prompt_dirty_unpushed_symbol "▲"
-set -l sexy_fish_prompt_unpulled_symbol "▽"
-set -l sexy_fish_prompt_dirty_unpulled_symbol "▼"
-set -l sexy_fish_prompt_unpushed_unpulled_symbol "⬡"
-set -l sexy_fish_prompt_dirty_unpushed_unpulled_symbol "⬢"
+set sexy_fish_prompt_synced_symbol ""
+set sexy_fish_prompt_dirty_synced_symbol "*"
+set sexy_fish_prompt_unpushed_symbol "△"
+set sexy_fish_prompt_dirty_unpushed_symbol "▲"
+set sexy_fish_prompt_unpulled_symbol "▽"
+set sexy_fish_prompt_dirty_unpulled_symbol "▼"
+set sexy_fish_prompt_unpushed_unpulled_symbol "⬡"
+set sexy_fish_prompt_dirty_unpushed_unpulled_symbol "⬢"
 
 # Apply symbol overrides that have been set in the environment
 # DEV: Working unicode symbols can be determined via the following gist
